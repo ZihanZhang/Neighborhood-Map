@@ -11,12 +11,22 @@
       }
 
       #map {
+        bottom:0px;
         height: 100%;
+        left: 362px;
+        position: absolute;
+        right: 0px;
       }
     </style>
   </head>
   <body>
-    <div id="map"></div>
+    <div class="container">
+      <div class="options-box">
+        <div id="neighborsList">
+        </div>
+      </div>
+      <div id="map"></div>
+    </div>
     <script>
       var map;
       function initMap() {
@@ -29,7 +39,7 @@
     </script>
 
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=MYAPIKEY&v=3&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYHG_S8AGdwIq_k2t-lv3NW1vVBmK088I&v=3&callback=initMap">
     </script>
 
   </body>
