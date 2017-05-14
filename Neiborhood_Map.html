@@ -13,9 +13,18 @@
       #map {
         bottom:0px;
         height: 100%;
-        left: 362px;
+        left: 262px;
         position: absolute;
         right: 0px;
+      }
+
+      #neighborsList {
+        bottom:0px;
+        height:100%;
+        left:0px;
+        position: absolute;
+        right: 262px;
+        background-color: rgba(0, 0, 0, 0.8);
       }
     </style>
   </head>
@@ -32,9 +41,36 @@
       function initMap() {
         // Constructor creates a new map - only center and zoom are required.
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 40.7413549, lng: -73.9980244},
-          zoom: 13
+          center: {lat: 42.346779, lng: -71.093696},
+          zoom: 15
         });
+
+        var neighbors = [
+          {
+            name: 'Wang Dudu',
+            location: '1404 Commonwealth'
+          }
+        ]
+
+        var geocoder = new google.maps.Geocoder();
+
+        var bounds = new google.maps.LatLngBounds();
+        bounds.extend(map.getCenter());
+        map.fitBounds(bounds);
+
+        geocoder.geocode(
+            { address: neighbors[0].location,
+              componentRestrictions: {locality: 'Boston'}
+            }, function(results, status) {
+              if (status == google.maps.GeocoderStatus.OK) {
+                bounds.extend(results[0].geometry.location);
+                map.fitBounds(bounds);
+
+              } else {
+                window.alert('We could not find that location - try entering a more' +
+                    ' specific place.');
+              }
+            });
       }
     </script>
 
