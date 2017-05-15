@@ -26,12 +26,30 @@
         right: 262px;
         background-color: rgba(0, 0, 0, 0.8);
       }
+
+      #neighors-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      #neighors-list li {
+        position: relative;
+        font-size: 24px;
+        color: white;
+        border-top: 1px dotted #ccc;
+        border-bottom: 1px dotted #ccc;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="options-box">
         <div id="neighborsList">
+          <button type="button">Add Contact</button>
+          <ul id="neighors-list">
+            <li id="Wang Dudu">Wang Dudu<button>Edit</button></li>
+          </ul>
         </div>
       </div>
       <div id="map"></div>
@@ -43,6 +61,12 @@
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 42.346779, lng: -71.093696},
           zoom: 15
+        });
+
+        var marker = new google.maps.Marker({
+          position: {lat: 42.346779, lng: -71.093696},
+          map: map,
+          title: 'First Marker!'
         });
 
         var neighbors = [
@@ -63,6 +87,12 @@
               componentRestrictions: {locality: 'Boston'}
             }, function(results, status) {
               if (status == google.maps.GeocoderStatus.OK) {
+                var marker = new google.maps.Marker({
+                  position: results[0].geometry.location,
+                  map: map,
+                  title: 'First Marker!'
+                });
+
                 bounds.extend(results[0].geometry.location);
                 map.fitBounds(bounds);
 
