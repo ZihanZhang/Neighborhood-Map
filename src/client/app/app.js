@@ -10,7 +10,7 @@ export default class App extends Component {
         return (
             <div style={{height: '100%'}}>
                 Map me!
-                <GoogleMap lat={-34.397} lng={150.644}/>
+                <GoogleMap lat={42.346779} lng={-71.093696}/>
             </div>
         );
     }
