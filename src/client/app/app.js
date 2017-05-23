@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import GoogleMap from './google_map'
+import SideBar from './sidebar'
 
 export default class App extends Component {
     constructor(props) {
@@ -9,7 +10,7 @@ export default class App extends Component {
     render() {
         return (
             <div style={{height: '100%'}}>
-                Map me!
+                <SideBar />
                 <GoogleMap lat={42.346779} lng={-71.093696}/>
             </div>
         );

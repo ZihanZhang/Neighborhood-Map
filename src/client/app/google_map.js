@@ -56,7 +56,12 @@ export default class extends Component {
 
   render() {
     return (
-      <div id="map" ref="map" style={{height: '100%', wdith: '100%'}}/>
+      <div id="map" ref="map" style={{
+          position: 'absolute',
+          bottom: '0px',
+          left: '231px',
+          right: '0px',
+          height: '100%'}}/>
     );
   }
 }
