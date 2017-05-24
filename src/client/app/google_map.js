@@ -13,11 +13,19 @@ export default class extends Component {
             zoom: 15
         });
 
-        var marker = new google.maps.Marker({
+        var homemarker = new google.maps.Marker({
           position: {lat: 42.346779, lng: -71.093696},
           map: map,
-          title: 'First Marker!'
+          title: 'Home'
         });
+
+        var homeinfowindow = new google.maps.InfoWindow({
+          content: "Home"
+        });
+
+        homemarker.addListener('click', function() {
+          homeinfowindow.open(map, homemarker);
+        })
 
         var neighbors = [
           {
@@ -27,6 +35,10 @@ export default class extends Component {
         ]
 
         var geocoder = new google.maps.Geocoder();
+
+        var infowindow = new google.maps.InfoWindow({
+          content: neighbors[0].name + ' ' + neighbors[0].location
+        });
 
         var bounds = new google.maps.LatLngBounds();
         bounds.extend(map.getCenter());
@@ -41,6 +53,10 @@ export default class extends Component {
                   position: results[0].geometry.location,
                   map: map,
                   title: 'First Marker!'
+                });
+
+                marker.addListener('click', function() {
+                  infowindow.open(map, marker);
                 });
 
                 bounds.extend(results[0].geometry.location);
