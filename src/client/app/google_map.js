@@ -27,17 +27,17 @@ export default class extends Component {
           homeinfowindow.open(map, homemarker);
         })
 
-        var neighbors = [
-          {
-            name: 'Wang Dudu',
-            location: '1404 Commonwealth'
-          }
-        ]
+        // var neighbors = [
+        //   {
+        //     name: 'Wang Dudu',
+        //     location: '1404 Commonwealth'
+        //   }
+        // ]
 
         var geocoder = new google.maps.Geocoder();
 
         var infowindow = new google.maps.InfoWindow({
-          content: neighbors[0].name + ' ' + neighbors[0].location
+          content: this.props.neighbors[0].name + ' ' + this.props.neighbors[0].location
         });
 
         var bounds = new google.maps.LatLngBounds();
@@ -45,7 +45,7 @@ export default class extends Component {
         map.fitBounds(bounds);
 
         geocoder.geocode(
-            { address: neighbors[0].location,
+            { address: this.props.neighbors[0].location,
               componentRestrictions: {locality: 'Boston'}
             }, function(results, status) {
               if (status == google.maps.GeocoderStatus.OK) {
