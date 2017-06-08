@@ -24,7 +24,7 @@ export default class extends Component {
         });
 
         homemarker.addListener('click', function() {
-          homeinfowindow.open(map, homemarker);
+          populateInfoWindow(homemarker, homeinfowindow);
         })
 
         // var neighbors = [
@@ -36,9 +36,9 @@ export default class extends Component {
 
         var geocoder = new google.maps.Geocoder();
 
-        var infowindow = new google.maps.InfoWindow({
-          content: this.props.neighbors[0].name + ' ' + this.props.neighbors[0].location
-        });
+        var infowindow = new google.maps.InfoWindow();
+
+        var info = this.props.neighbors[0].name + ' ' + this.props.neighbors[0].location;
 
         var bounds = new google.maps.LatLngBounds();
         bounds.extend(map.getCenter());
@@ -52,11 +52,11 @@ export default class extends Component {
                 var marker = new google.maps.Marker({
                   position: results[0].geometry.location,
                   map: map,
-                  title: 'First Marker!'
+                  title: info
                 });
 
                 marker.addListener('click', function() {
-                  infowindow.open(map, marker);
+                  populateInfoWindow(marker, infowindow);
                 });
 
                 bounds.extend(results[0].geometry.location);
@@ -68,6 +68,44 @@ export default class extends Component {
               }
             }
         );
+
+        function populateInfoWindow(marker, infowindow) {
+        if (infowindow.marker != marker) {
+          infowindow.setContent('');
+          infowindow.marker = marker;
+          infowindow.addListener('closeclick', function() {
+            infowindow.marker = null;
+          });
+          var streetViewService = new google.maps.StreetViewService();
+          var radius = 50;
+          function getStreetView(data, status) {
+            if (status == google.maps.StreetViewStatus.OK) {
+              var nearStreetViewLocation = data.location.latLng;
+              var heading = google.maps.geometry.spherical.computeHeading(
+                nearStreetViewLocation, marker.position);
+                infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+                document.getElementById('pano').style.width = "200px";
+                document.getElementById('pano').style.height = "200px";
+                var panoramaOptions = {
+                  position: nearStreetViewLocation,
+                  pov: {
+                    heading: heading,
+                    pitch: 30
+                  }
+                };
+              var panorama = new google.maps.StreetViewPanorama(
+                document.getElementById('pano'), panoramaOptions);
+            } else {
+              infowindow.setContent('<div>' + marker.title + '</div>' +
+                '<div>No Street View Found</div>');
+            }
+          }
+
+          streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+
+          infowindow.open(map, marker);
+        }
+      }
     }
 
   render() {
