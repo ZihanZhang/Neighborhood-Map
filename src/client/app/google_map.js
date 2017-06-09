@@ -9,8 +9,36 @@ export default class extends Component {
       }
     }
 
+    componentWillReceiveProps(nextProps) {
+      // if (this.state.showcontact) {
+      //   if (!nextProps.showcontact) {
+      //     this.setState({
+      //       showcontact: false
+      //     })
+      //   }
+      // }
+      // else {
+      //   if (nextProps.showcontact) {
+      //     this.setState({
+      //       showcontact: true
+      //     })
+      //   }
+      // }
+      if (nextProps.showcontact) {
+        this.setState({
+          showcontact: true
+        })
+      }
+      else {
+        this.setState({
+          showcontact: false
+        })
+      }
+    }
+
     componentDidUpdate() {
         var map = this.state.map;
+        var showcontact = this.state.showcontact;
 
         var homemarker = new google.maps.Marker({
           position: {lat: 42.346779, lng: -71.093696},
@@ -50,9 +78,16 @@ export default class extends Component {
               if (status == google.maps.GeocoderStatus.OK) {
                 var marker = new google.maps.Marker({
                   position: results[0].geometry.location,
-                  map: map,
+                  // map: map,
                   title: info
                 });
+
+                if (showcontact) {
+                  marker.setMap(map);
+                }
+                else {
+                  marker.setMap(null);
+                }
 
                 marker.addListener('click', function() {
                   populateInfoWindow(marker, infowindow);
