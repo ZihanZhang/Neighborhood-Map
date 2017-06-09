@@ -1,17 +1,16 @@
 import React, {Component} from 'react';
 
 export default class extends Component {
-
-    shouldComponentUpdata() {
-        return false;
+    constructor(props) {
+      super(props);
+      this.state = {
+        showcontact: true,
+        map: null
+      }
     }
 
-    componentDidMount() {
-        var map;
-        map = new google.maps.Map( this.refs.map, {
-            center: {lat: this.props.lat, lng: this.props.lng},
-            zoom: 15
-        });
+    componentDidUpdate() {
+        var map = this.state.map;
 
         var homemarker = new google.maps.Marker({
           position: {lat: 42.346779, lng: -71.093696},
@@ -41,7 +40,7 @@ export default class extends Component {
         var info = this.props.neighbors[0].name + ' ' + this.props.neighbors[0].location;
 
         var bounds = new google.maps.LatLngBounds();
-        bounds.extend(map.getCenter());
+        bounds.extend(this.state.map.getCenter());
         map.fitBounds(bounds);
 
         geocoder.geocode(
@@ -106,6 +105,21 @@ export default class extends Component {
           infowindow.open(map, marker);
         }
       }
+    }
+
+    componentDidMount() {
+        // var map;
+        // map = new google.maps.Map( this.refs.map, {
+        //     center: {lat: this.props.lat, lng: this.props.lng},
+        //     zoom: 15
+        // });
+        this.setState({
+          map: new google.maps.Map( this.refs.map, {
+            center: {lat: this.props.lat, lng: this.props.lng},
+            zoom: 15
+          }),
+          function(){console.log("ssdfs")}
+        })
     }
 
   render() {

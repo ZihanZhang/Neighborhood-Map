@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 export default class extends Component {
+    
     render() {
         return (
             <div style={{        
@@ -10,6 +11,9 @@ export default class extends Component {
                 position: 'absolute',
                 right: '1050px',
                 backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
+                <button type="button" onClick={this.props.showContact}>Show Contact</button>
+                <button type="button" onClick={this.props.hideContact}>Hide Contact</button>
+                <hr/>
                 <button type="button">Add Contact</button>
                 <ul id="neighors-list">
                     <li id="Wang Dudu">Wang Dudu<button>Edit</button></li>
