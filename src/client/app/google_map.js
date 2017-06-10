@@ -5,7 +5,8 @@ export default class extends Component {
       super(props);
       this.state = {
         showcontact: true,
-        map: null
+        map: null,
+        markers: []
       }
     }
 
@@ -33,75 +34,87 @@ export default class extends Component {
         this.setState({
           showcontact: false
         })
-      }
+      };
     }
 
     componentDidUpdate() {
         var map = this.state.map;
         var showcontact = this.state.showcontact;
+        var markers = this.state.markers;
+        console.log(markers)
 
-        var homemarker = new google.maps.Marker({
-          position: {lat: 42.346779, lng: -71.093696},
-          map: map,
-          title: 'Home'
-        });
+        if (!showcontact) {
+          for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null)
+          }
+        }
+        else if (markers.length == 0){
+          var homemarker = new google.maps.Marker({
+            position: {lat: 42.346779, lng: -71.093696},
+            map: map,
+            title: 'Home'
+          });
 
-        var homeinfowindow = new google.maps.InfoWindow({
-          content: "Home"
-        });
+          var homeinfowindow = new google.maps.InfoWindow({
+            content: "Home"
+          });
 
-        homemarker.addListener('click', function() {
-          populateInfoWindow(homemarker, homeinfowindow);
-        })
+          homemarker.addListener('click', function() {
+            populateInfoWindow(homemarker, homeinfowindow);
+          })
 
-        // var neighbors = [
-        //   {
-        //     name: 'Wang Dudu',
-        //     location: '1404 Commonwealth'
-        //   }
-        // ]
+            var geocoder = new google.maps.Geocoder();
 
-        var geocoder = new google.maps.Geocoder();
+            var infowindow = new google.maps.InfoWindow();
 
-        var infowindow = new google.maps.InfoWindow();
+            var info = this.props.neighbors[0].name + ' ' + this.props.neighbors[0].location;
 
-        var info = this.props.neighbors[0].name + ' ' + this.props.neighbors[0].location;
+            var bounds = new google.maps.LatLngBounds();
+            bounds.extend(this.state.map.getCenter());
+            map.fitBounds(bounds);
 
-        var bounds = new google.maps.LatLngBounds();
-        bounds.extend(this.state.map.getCenter());
-        map.fitBounds(bounds);
+            var marker = null
 
-        geocoder.geocode(
-            { address: this.props.neighbors[0].location,
-              componentRestrictions: {locality: 'Boston'}
-            }, function(results, status) {
-              if (status == google.maps.GeocoderStatus.OK) {
-                var marker = new google.maps.Marker({
-                  position: results[0].geometry.location,
-                  // map: map,
-                  title: info
-                });
+            geocoder.geocode(
+                { address: this.props.neighbors[0].location,
+                  componentRestrictions: {locality: 'Boston'}
+                }, function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                    marker = new google.maps.Marker({
+                      position: results[0].geometry.location,
+                      map: map,
+                      title: info
+                    });
 
-                if (showcontact) {
-                  marker.setMap(map);
+                    marker.addListener('click', function() {
+                      populateInfoWindow(marker, infowindow);
+                    });
+
+                    markers.push(marker)
+
+                    bounds.extend(results[0].geometry.location);
+                    map.fitBounds(bounds);
+
+                  } else {
+                    window.alert('We could not find that location - try entering a more' +
+                        ' specific place.');
+                  }
                 }
-                else {
-                  marker.setMap(null);
-                }
+            );
+            
+            markers.push(homemarker)
 
-                marker.addListener('click', function() {
-                  populateInfoWindow(marker, infowindow);
-                });
 
-                bounds.extend(results[0].geometry.location);
-                map.fitBounds(bounds);
+            this.setState({
+              markers: markers
+            })
+        }
+        else {
+          for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map)
+          }
+        }
 
-              } else {
-                window.alert('We could not find that location - try entering a more' +
-                    ' specific place.');
-              }
-            }
-        );
 
         function populateInfoWindow(marker, infowindow) {
         if (infowindow.marker != marker) {
@@ -142,6 +155,8 @@ export default class extends Component {
       }
     }
 
+//should put all map initialization in this method. define a variable map and did all other stuff.
+//Finally set the state and the map will be open
     componentDidMount() {
         // var map;
         // map = new google.maps.Map( this.refs.map, {
