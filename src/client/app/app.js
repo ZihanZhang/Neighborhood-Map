@@ -23,8 +23,14 @@ export default class App extends Component {
         };
     }
 
-    addContact() {
-        console.log("sdfs")
+    addContact(name, location) {
+        var newcontact = {
+            name: name,
+            location: location
+        }
+        this.setState({
+            neighbors: this.state.neighbors.concat([newcontact])
+        })
     }
 
     showContact() {
