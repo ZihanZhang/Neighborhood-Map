@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 
 export default class extends Component {
+
+    addContactForm() {
+        document.getElementById('formdiv').style = {display: 'block'}
+    }
     
     render() {
         return (
@@ -14,7 +18,10 @@ export default class extends Component {
                 <button type="button" onClick={this.props.showContact}>Show Contact</button>
                 <button type="button" onClick={this.props.hideContact}>Hide Contact</button>
                 <hr/>
-                <button type="button">Add Contact</button>
+                <button type="button" onClick={this.addContactForm}>Add Contact</button>
+                <div id="formdiv" style={{"display": "none"}}>Hello
+                    <button type="button" >Submit</button>    
+                </div> 
                 <ul id="neighors-list">
                     <li id="Wang Dudu">Wang Dudu<button>Edit</button></li>
                 </ul>

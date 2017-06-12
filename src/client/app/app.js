@@ -10,6 +10,8 @@ export default class App extends Component {
 
         this.hideContact = this.hideContact.bind(this)
 
+        this.addContact = this.addContact.bind(this)
+
         this.state = {
             neighbors: [
                 {
@@ -19,6 +21,10 @@ export default class App extends Component {
             ],
             showcontact: true,
         };
+    }
+
+    addContact() {
+        console.log("sdfs")
     }
 
     showContact() {
@@ -37,7 +43,7 @@ export default class App extends Component {
         return (
             <div style={{height: '100%'}}>
                 <SideBar neighbors = {this.state.neighbors} showcontact = {this.state.showcontact} 
-                showContact = {this.showContact} hideContact = {this.hideContact}/>
+                showContact = {this.showContact} hideContact = {this.hideContact} addContact = {this.addContact}/>
                 <GoogleMap lat={42.346779} lng={-71.093696} neighbors = {this.state.neighbors} showcontact = {this.state.showcontact}/>
             </div>
         );

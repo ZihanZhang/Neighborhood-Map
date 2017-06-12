@@ -41,7 +41,6 @@ export default class extends Component {
         var map = this.state.map;
         var showcontact = this.state.showcontact;
         var markers = this.state.markers;
-        console.log(markers)
 
         if (!showcontact) {
           for (var i = 0; i < markers.length; i++) {
