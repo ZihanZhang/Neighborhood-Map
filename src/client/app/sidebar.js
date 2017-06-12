@@ -2,11 +2,38 @@ import React, {Component} from 'react';
 
 export default class extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.addContactForm = this.addContactForm.bind(this)
+
+        this.submitContactForm = this.submitContactForm.bind(this)
+
+        this.state = {
+            showform: false
+        }
+
+    }
+
     addContactForm() {
-        document.getElementById('formdiv').style = {display: 'block'}
+        // document.getElementById('formdiv').style = {display: 'block'}
+        this.setState({
+            showform: true
+        })
+    }
+
+    submitContactForm() {
+        this.setState({
+            showform: false
+        })
     }
     
     render() {
+
+        /*var contactform = this.state.showform? <div id="formdiv" style={{"display": "none"}}>Hello
+                    <button type="button" onClick={this.submitContactForm}>Submit</button>    
+                </div> : null*/
+
         return (
             <div style={{        
                 bottom:'0px',
@@ -19,9 +46,10 @@ export default class extends Component {
                 <button type="button" onClick={this.props.hideContact}>Hide Contact</button>
                 <hr/>
                 <button type="button" onClick={this.addContactForm}>Add Contact</button>
-                <div id="formdiv" style={{"display": "none"}}>Hello
-                    <button type="button" >Submit</button>    
+                <div id="formdiv" hidden={!this.state.showform}>Hello
+                    <button type="button" onClick={this.submitContactForm}>Submit</button>    
                 </div> 
+                {/*{contactform}*/}
                 <ul id="neighors-list">
                     <li id="Wang Dudu">Wang Dudu<button>Edit</button></li>
                 </ul>
