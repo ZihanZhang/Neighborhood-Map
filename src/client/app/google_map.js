@@ -40,7 +40,7 @@ export default class extends Component {
 
       var map = this.state.map;
       var geocoder = new google.maps.Geocoder();
-      var bounds = new google.maps.LatLngBounds();
+      // var bounds = new google.maps.LatLngBounds();
       var markers = this.state.markers;
       var marker = null
 
@@ -61,8 +61,8 @@ export default class extends Component {
 
                       markers.push(marker)
 
-                      bounds.extend(results[0].geometry.location);
-                      map.fitBounds(bounds);
+                      // bounds.extend(results[0].geometry.location);
+                      // map.fitBounds(bounds);
 
                     } else {
                       // this.setState({
@@ -149,9 +149,9 @@ export default class extends Component {
 
             var info = this.props.neighbors[0].name + ' ' + this.props.neighbors[0].location;
 
-            var bounds = new google.maps.LatLngBounds();
-            bounds.extend(this.state.map.getCenter());
-            map.fitBounds(bounds);
+            // var bounds = new google.maps.LatLngBounds();
+            // bounds.extend(this.state.map.getCenter());
+            // map.fitBounds(bounds);
 
             var marker = null
 
@@ -173,8 +173,8 @@ export default class extends Component {
 
                       markers.push(marker)
 
-                      bounds.extend(results[0].geometry.location);
-                      map.fitBounds(bounds);
+                      // bounds.extend(results[0].geometry.location);
+                      // map.fitBounds(bounds);
 
                     } else {
                       // this.setState({
