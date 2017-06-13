@@ -3,10 +3,12 @@ import React, {Component} from 'react';
 export default class extends Component {
     constructor(props) {
       super(props);
+
       this.state = {
         showcontact: true,
         map: null,
-        markers: []
+        markers: [],
+        newcontact: null
       }
     }
 
@@ -35,6 +37,86 @@ export default class extends Component {
           showcontact: false
         })
       };
+
+      var map = this.state.map;
+      var geocoder = new google.maps.Geocoder();
+      var bounds = new google.maps.LatLngBounds();
+      var markers = this.state.markers;
+      var marker = null
+
+      if (this.state.newcontact != nextProps.newcontact) {
+              geocoder.geocode(
+                  { address: nextProps.location,
+                    componentRestrictions: {locality: 'Boston'}
+                  }, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                      marker = new google.maps.Marker({
+                        position: results[0].geometry.location,
+                        map: map,
+                      });
+
+                      marker.addListener('click', function() {
+                        populateInfoWindow(marker, infowindow);
+                      });
+
+                      markers.push(marker)
+
+                      bounds.extend(results[0].geometry.location);
+                      map.fitBounds(bounds);
+
+                    } else {
+                      // this.setState({
+                      //   shouldupdate: false
+                      // })
+                      window.alert('We could not find that location - try entering a more' +
+                          ' specific place.');
+                    }
+                  }
+              );
+
+              this.setState({
+                markers: markers
+              })
+              
+      }
+
+        function populateInfoWindow(marker, infowindow) {
+        if (infowindow.marker != marker) {
+          infowindow.setContent('');
+          infowindow.marker = marker;
+          infowindow.addListener('closeclick', function() {
+            infowindow.marker = null;
+          });
+          var streetViewService = new google.maps.StreetViewService();
+          var radius = 50;
+          function getStreetView(data, status) {
+            if (status == google.maps.StreetViewStatus.OK) {
+              var nearStreetViewLocation = data.location.latLng;
+              var heading = google.maps.geometry.spherical.computeHeading(
+                nearStreetViewLocation, marker.position);
+                infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+                document.getElementById('pano').style.width = "200px";
+                document.getElementById('pano').style.height = "200px";
+                var panoramaOptions = {
+                  position: nearStreetViewLocation,
+                  pov: {
+                    heading: heading,
+                    pitch: 30
+                  }
+                };
+              var panorama = new google.maps.StreetViewPanorama(
+                document.getElementById('pano'), panoramaOptions);
+            } else {
+              infowindow.setContent('<div>' + marker.title + '</div>' +
+                '<div>No Street View Found</div>');
+            }
+          }
+
+          streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+
+          infowindow.open(map, marker);
+        }
+      }
     }
 
     componentDidUpdate() {
@@ -74,34 +156,39 @@ export default class extends Component {
 
             var marker = null
 
-            geocoder.geocode(
-                { address: this.props.neighbors[0].location,
-                  componentRestrictions: {locality: 'Boston'}
-                }, function(results, status) {
-                  if (status == google.maps.GeocoderStatus.OK) {
-                    marker = new google.maps.Marker({
-                      position: results[0].geometry.location,
-                      map: map,
-                      title: info
-                    });
+            for (var i = 0; i < this.props.neighbors.length; i++) {
+              geocoder.geocode(
+                  { address: this.props.neighbors[i].location,
+                    componentRestrictions: {locality: 'Boston'}
+                  }, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                      marker = new google.maps.Marker({
+                        position: results[0].geometry.location,
+                        map: map,
+                        title: info
+                      });
 
-                    marker.addListener('click', function() {
-                      populateInfoWindow(marker, infowindow);
-                    });
+                      marker.addListener('click', function() {
+                        populateInfoWindow(marker, infowindow);
+                      });
 
-                    markers.push(marker)
+                      markers.push(marker)
 
-                    bounds.extend(results[0].geometry.location);
-                    map.fitBounds(bounds);
+                      bounds.extend(results[0].geometry.location);
+                      map.fitBounds(bounds);
 
-                  } else {
-                    window.alert('We could not find that location - try entering a more' +
-                        ' specific place.');
+                    } else {
+                      // this.setState({
+                      //   shouldupdate: false
+                      // })
+                      window.alert('We could not find that location - try entering a more' +
+                          ' specific place.');
+                    }
                   }
-                }
-            );
-            
-            markers.push(homemarker)
+              );
+              
+              markers.push(homemarker)
+            }
 
 
             this.setState({

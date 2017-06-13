@@ -19,6 +19,7 @@ export default class App extends Component {
                     location: '1404 Commonwealth'
                 }
             ],
+            newcontact: null,
             showcontact: true,
         };
     }
@@ -29,6 +30,7 @@ export default class App extends Component {
             location: location
         }
         this.setState({
+            newcontact: newcontact,
             neighbors: this.state.neighbors.concat([newcontact])
         })
     }
@@ -50,7 +52,8 @@ export default class App extends Component {
             <div style={{height: '100%'}}>
                 <SideBar neighbors = {this.state.neighbors} showcontact = {this.state.showcontact} 
                 showContact = {this.showContact} hideContact = {this.hideContact} addContact = {this.addContact}/>
-                <GoogleMap lat={42.346779} lng={-71.093696} neighbors = {this.state.neighbors} showcontact = {this.state.showcontact}/>
+                <GoogleMap lat={42.346779} lng={-71.093696} neighbors = {this.state.neighbors} 
+                showcontact = {this.state.showcontact} newcontact = {this.state.newcontact}/>
             </div>
         );
     }
