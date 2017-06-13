@@ -166,7 +166,6 @@ export default class extends Component {
                         map: map,
                         title: info
                       });
-
                       marker.addListener('click', function() {
                         populateInfoWindow(marker, infowindow);
                       });
@@ -195,9 +194,12 @@ export default class extends Component {
             })
         }
         else {
+          var bounds = new google.maps.LatLngBounds();
           for (var i = 0; i < markers.length; i++) {
+            bounds.extend(markers[i].position)
             markers[i].setMap(map)
           }
+          map.fitBounds(bounds)
         }
 
 
@@ -253,7 +255,7 @@ export default class extends Component {
             center: {lat: this.props.lat, lng: this.props.lng},
             zoom: 15
           }),
-          function(){console.log("ssdfs")}
+          function(){console.log("Test")}
         })
     }
 
