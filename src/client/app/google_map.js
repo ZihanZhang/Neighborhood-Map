@@ -46,7 +46,7 @@ export default class extends Component {
 
       if (this.state.newcontact != nextProps.newcontact) {
               geocoder.geocode(
-                  { address: nextProps.location,
+                  { address: nextProps.newcontact.location,
                     componentRestrictions: {locality: 'Boston'}
                   }, function(results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
@@ -76,8 +76,7 @@ export default class extends Component {
 
               this.setState({
                 markers: markers
-              })
-              
+              })              
       }
 
         function populateInfoWindow(marker, infowindow) {
