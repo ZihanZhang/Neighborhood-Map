@@ -122,6 +122,7 @@ export default class extends Component {
         var map = this.state.map;
         var showcontact = this.state.showcontact;
         var markers = this.state.markers;
+        var homemarkericon = makeMarkerIcon('FFFF24');
 
         if (!showcontact) {
           for (var i = 0; i < markers.length; i++) {
@@ -132,7 +133,8 @@ export default class extends Component {
           var homemarker = new google.maps.Marker({
             position: {lat: 42.346779, lng: -71.093696},
             map: map,
-            title: 'Home'
+            title: 'Home',
+            icon: homemarkericon
           });
 
           var homeinfowindow = new google.maps.InfoWindow({
@@ -239,6 +241,17 @@ export default class extends Component {
 
           infowindow.open(map, marker);
         }
+      }
+
+      function makeMarkerIcon(markerColor) {
+        var markerImage = new google.maps.MarkerImage(
+          'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+          '|40|_|%E2%80%A2',
+          new google.maps.Size(21, 34),
+          new google.maps.Point(0, 0),
+          new google.maps.Point(10, 34),
+          new google.maps.Size(21,34));
+        return markerImage;
       }
     }
 
